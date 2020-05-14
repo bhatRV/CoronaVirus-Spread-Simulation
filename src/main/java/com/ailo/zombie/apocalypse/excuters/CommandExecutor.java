@@ -6,10 +6,12 @@ import com.ailo.zombie.apocalypse.commands.AdvanceCommand;
 import com.ailo.zombie.apocalypse.commands.Command;
 import com.ailo.zombie.apocalypse.commands.QuitCommand;
 import com.ailo.zombie.apocalypse.entities.Location;
-import com.ailo.zombie.apocalypse.entities.ZombieGrid;
 import com.ailo.zombie.apocalypse.entities.Zombie;
+import com.ailo.zombie.apocalypse.entities.ZombieGrid;
 import com.ailo.zombie.apocalypse.entities.enums.Type;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.function.BiFunction;
  * Applies the direction command on the Zombie, gets the list of the infections, validates and keeps track of points scored.
  */
 public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
+    private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
     private final ZombieGrid[][] siteMap;
 
     public CommandExecutor(ZombieGrid[][] siteMap) {
@@ -32,8 +35,10 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
         List<String> lines = zombie.getLines();
         String currentZombieLocation = lines.get(1);
-        System.out.println(currentZombieLocation + " :: zombies CurrentLocation : (" + zombie.getCurrentLocation().getX() + " , " + zombie.getCurrentLocation().getY() + ")");
-
+        logger.debug("{} :: zombies CurrentLocation [ ({},{}) ]",
+                currentZombieLocation,
+                zombie.getCurrentLocation().getX(),
+                zombie.getCurrentLocation().getY());
         if (zombie.getCurrentLocation() != null && !(command instanceof QuitCommand)) {
 
             List<Location> path = command.apply(zombie.getCurrentLocation());
@@ -66,7 +71,11 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
                 if (zombieGrid.getType() == Type.CREATURE) {
                     zombieGrid.setInfected(true);
-                    System.out.println(zombieGrid.getType().name() + " converted to Zombie at (" + p.getX() + "," + p.getY() + ")");
+                    logger.debug("{} :: converted to Zombie at [ ({},{}) ]",
+                            zombieGrid.getType().name(),
+                            p.getX(),
+                            p.getY());
+
                     ZombieGrid[][] newZombiePath = siteMap.clone();
                     newZombiePath[p.getX()][p.getY()] = new ZombieGrid(Type.ZOMBIE);
                     List<String> lines = generateInfectedZombieInput(zombie, p);
@@ -77,7 +86,7 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                     zombieThread.start();
                     zombieThread.join();
 
-                    int totalPoints=FinalStatus.getZombiesCount();
+                    int totalPoints = FinalStatus.getZombiesCount();
                     FinalStatus.setZombiesCount(++totalPoints);
                 }
             } catch (ArrayIndexOutOfBoundsException | InterruptedException e) {

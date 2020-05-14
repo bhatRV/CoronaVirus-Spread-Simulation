@@ -1,14 +1,17 @@
 package com.ailo.zombie.apocalypse.excuters;
 
+import com.ailo.zombie.apocalypse.entities.ZombieGrid;
 import com.ailo.zombie.apocalypse.entities.enums.Type;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
-import com.ailo.zombie.apocalypse.entities.ZombieGrid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.function.Function;
 
 
 public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
+    private static final Logger logger = LoggerFactory.getLogger(MatrixGenerator.class);
 
     @Override
     public ZombieGrid[][] apply(List<String> lines) throws SimulationException {
@@ -31,13 +34,14 @@ public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
                         new ZombieGrid(Type.CREATURE);
             }
         }
-        System.out.println("Initial layout of Zombie and creature position: ");
-        printGrid(sqr);
-
+        if (logger.isDebugEnabled()) {
+            printGrid(sqr);
+        }
         return sqr;
     }
 
     public static void printGrid(ZombieGrid[][] matrix) {
+        logger.debug("Initial layout of Zombie and creature position ");
         for (int x = 0; x < matrix.length; x++) {
             for (int y = 0; y < matrix[x].length; y++) {
                 if (y == 0 || y % (matrix.length - 1) != 0) {
