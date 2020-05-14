@@ -16,11 +16,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 /**
- * Applied commands on the Bulldozer, gets the list of next positions, validates and keeps count of cost-items.
+ * Applies the direction command on the Zombie, gets the list of the infections, validates and keeps track of points scored.
  */
 public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
-
-    private static int totalInfected = 0;
     private final ZombieGrid[][] siteMap;
 
     public CommandExecutor(ZombieGrid[][] siteMap) {
@@ -40,24 +38,25 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
             List<Location> path = command.apply(zombie.getCurrentLocation());
 
-            if (!path.isEmpty()) { //to check paint-scratch scenario
+            if (!path.isEmpty()) {
                 zombie.setCurrentLocation(path.get(path.size() - 1));
             }
 
-            if (command instanceof AdvanceCommand && !path.isEmpty() && zombie.getCurrentLocation().getDirection() != null) {
-                zombie.setPlaced(true);
-                try {
-                    process(path, zombie);
-                } catch (SimulationException e) {
-                    zombie.getCommandList().add(new QuitCommand(e.getMessage()));
-                }
+            if (command instanceof AdvanceCommand && !path.isEmpty()) {
+                process(path, zombie);
             } else {
-                String zombiePosition = FinalStatus.getZombiesPosition();
-                zombiePosition = zombiePosition.concat("(" + zombie.getCurrentLocation().getX() + "," + zombie.getCurrentLocation().getY() + ")");
-                FinalStatus.setZombiesPosition(zombiePosition);
+                setZombiePosition(zombie);
             }
+        } else {
+            setZombiePosition(zombie);
         }
         return zombie;
+    }
+
+    private void setZombiePosition(Zombie zombie) {
+        String zombiePosition = FinalStatus.getZombiesPosition();
+        zombiePosition = zombiePosition.concat("(" + zombie.getCurrentLocation().getX() + "," + zombie.getCurrentLocation().getY() + ")");
+        FinalStatus.setZombiesPosition(zombiePosition);
     }
 
     private void process(List<Location> locations, Zombie zombie) {
@@ -67,16 +66,10 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
                 if (zombieGrid.getType() == Type.CREATURE) {
                     zombieGrid.setInfected(true);
-                    totalInfected++;
                     System.out.println(zombieGrid.getType().name() + " converted to Zombie at (" + p.getX() + "," + p.getY() + ")");
                     ZombieGrid[][] newZombiePath = siteMap.clone();
                     newZombiePath[p.getX()][p.getY()] = new ZombieGrid(Type.ZOMBIE);
-                    List<String> lines = new ArrayList<String>(zombie.getLines());
-                    String creatureLocation = lines.get(2);
-                    String regex = p.getX() + "," + p.getY();
-                    String newCreatureLocation = creatureLocation.replaceAll(regex, "");
-                    lines.set(1, p.getX() + "," + p.getY());
-                    lines.set(2, newCreatureLocation);
+                    List<String> lines = generateInfectedZombieInput(zombie, p);
                     Runnable zombieRunnable = new StartInfection(newZombiePath, lines);
 
                     Thread zombieThread = new Thread(zombieRunnable);
@@ -84,14 +77,25 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                     zombieThread.start();
                     zombieThread.join();
 
-                    FinalStatus.setZombiesCount(totalInfected);
+                    int totalPoints=FinalStatus.getZombiesCount();
+                    FinalStatus.setZombiesCount(++totalPoints);
                 }
             } catch (ArrayIndexOutOfBoundsException | InterruptedException e) {
 
                 throw new SimulationException("\nSession ended because there is an attempt to navigate "
-                        + "beyond the boundaries of the site; ");
+                        + "beyond the boundaries of the ZombieGrid; ");
             }
         });
 
+    }
+
+    private List<String> generateInfectedZombieInput(Zombie zombie, Location p) {
+        List<String> lines = new ArrayList<String>(zombie.getLines());
+        String creatureLocation = lines.get(2);
+        String regex = p.getX() + "," + p.getY();
+        String newCreatureLocation = creatureLocation.replaceAll(regex, "");
+        lines.set(1, p.getX() + "," + p.getY());
+        lines.set(2, newCreatureLocation);
+        return lines;
     }
 }

@@ -17,7 +17,7 @@ public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
 
         for (int x = 0; x < sqr.length; x++) {
             for (int y = 0; y < sqr[0].length; y++) {
-                sqr[x][y] = new ZombieGrid(Type.PLAIN);
+                sqr[x][y] = new ZombieGrid(Type.NONE);
             }
         }
 
@@ -37,13 +37,13 @@ public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
         return sqr;
     }
 
-    public static void printGrid(ZombieGrid[][] metrix) {
-        for (int x = 0; x < metrix.length; x++) {
-            for (int y = 0; y < metrix[x].length; y++) {
-                if (y == 0 || y % (metrix.length - 1) != 0) {
-                    System.out.print(String.format("%10s", metrix[x][y]) + "(" + x + "," + y + ") | ");
+    public static void printGrid(ZombieGrid[][] matrix) {
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < matrix[x].length; y++) {
+                if (y == 0 || y % (matrix.length - 1) != 0) {
+                    System.out.print(String.format("%10s", matrix[x][y]) + "(" + x + "," + y + ") | ");
                 } else {
-                    System.out.println(String.format("%10s", metrix[x][y]) + "(" + x + "," + y + ") | ");
+                    System.out.println(String.format("%10s", matrix[x][y]) + "(" + x + "," + y + ") | ");
                 }
             }
         }

@@ -1,10 +1,11 @@
 package com.ailo.zombie.apocalypse.entities.enums;
 
 /**
- * The possible types of squares and relevant activities.
+ * @Rashmi.Vishnu
+ * The possible types of ZombieGrid and relevant activities.
  */
 public enum Type {
-    PLAIN,
+    NONE,
     ZOMBIE,
     CREATURE;
 
@@ -15,7 +16,7 @@ public enum Type {
             case 'C':
                 return Type.CREATURE;
             default:
-                return Type.PLAIN;
+                return Type.NONE;
         }
     }
 

@@ -16,7 +16,7 @@ public class QuitCommandTest {
 
         QuitCommand quitCommand = new QuitCommand("test");
 
-        Location currentLocation = new Location(0,0, Direction.EAST);
+        Location currentLocation = new Location(0,0,Direction.U,"DLLU");
 
         List<Location> actual = quitCommand.apply(currentLocation);
 

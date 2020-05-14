@@ -1,7 +1,6 @@
 package com.ailo.zombie.apocalypse.commands;
 
 
-import com.ailo.zombie.apocalypse.FinalStatus;
 import com.ailo.zombie.apocalypse.entities.Location;
 import com.ailo.zombie.apocalypse.entities.enums.Direction;
 
@@ -11,8 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Calculated the list of positions for an Advance command.
- * Assumption: START FROM NEXT SQUARE
+ * @author Rashmi.Vishnu
+ * Calculates the list of positions for Every command. Advances in the Given Direction.
+ * Assumption: START FROM NEXT SQUARE, variable step count holds the steps, currently defaults to 1, can be extended
  */
 public class AdvanceCommand implements Command {
 
@@ -23,7 +23,6 @@ public class AdvanceCommand implements Command {
     }
 
     public List<Location> apply(Location currentLocation) {
-
 
         List<Location> path = new ArrayList<>();
         if (currentLocation != null) {
