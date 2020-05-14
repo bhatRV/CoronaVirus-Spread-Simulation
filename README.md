@@ -8,7 +8,7 @@
 
  **_To run from Eclipse/IntelliJ_**
 
-Run as application ".java"
+Run as application "ZombieApocalypse.java   <inputFilePath>"
 
 **_To build the application_**
 
@@ -38,4 +38,17 @@ Run as application ".java"
    
 #### PRE configured Data
 
+/input/InputFile.txt
 
+#### Input File Format
+```diff
+
+
++ 1. Line 1: Grid Dimension.  
+        eg: 4 
++ 1. Line 2: Zombie Location 
+       eg: x,y 
++ 1. Line 3: creatures Locations seperated by space 
+       eg. x1,y1 x2,y2 x3,y3 
++ 1. Line 4: Directions for the Zombie. where ==> D: Down, R: Right L:Left and U: UP 
+        eg.DLLURL    
