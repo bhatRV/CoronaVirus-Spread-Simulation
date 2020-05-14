@@ -1,14 +1,21 @@
  
-# Project Name : Zombie Apocalypse
+# Project Title: Zombie Apocalypse
+
 
 ## Author : RASHMI VISHNU
  
-## HOW TO START THE APPLICATION / HOW TO RUN THE SIMULATION
 
+### Prerequisites
 
- **_To run from Eclipse/IntelliJ_**
+```
+Java 1.8
+```
+## RUNNING THE SIMULATION
 
-Run as application "ZombieApocalypse.java   <inputFilePath>"
+**_To run from Eclipse/IntelliJ_**
+
+Run as application "ZombieApocalypse.java  <inputFilePath>"
+   eg. ZombieApocalypse.java input/inputFile.txt
 
 **_To build the application_**
 
@@ -19,28 +26,25 @@ Run as application "ZombieApocalypse.java   <inputFilePath>"
 
 
 
-#### ASSUMPTIONS and SCOPE for ENHANCEMENT
+#### ASSUMPTIONS AND SCOPE FOR ENHANCEMENT
 
 1. Extensive test cases to cover more scenarios can be added
-1. Validations can be enhanced to include more on the inputs. Basic validations are provided for now.
+1. Validations can be enhanced on the inputs. Basic validations are provided for now.
 1. User Interface can be provided
-1. Assumption:Grid's are generated based on the given input, if X is the input the grid will be a matrix of X by X
-1. Assumption: Starting point for the gris is the top Left corner.
-3. Assumption: Input will be provided using a file and the order for the input values will be followed. No Validations are provided
-
+1. Assumption: Grid's are generated based on the given dimention (1st line in the file), if X is the input the grid/matrix will be a SQUARE MATRIX of X by X
+1. Assumption: Starting point for the grid/matrix is the top Left corner.
+1. Assumption: Input will be provided using a file and the order for the input values will be followed.
  
 #### Scenarios covered
 1. Zombie can start from any location in the grid
-2. Grid's are generated based on the given input, if X is the input the grid will be a matrix of X by X
+2. Zombie starts moving , and if it finds a creature in its path the creature will be convereted to a new Zombie(Infected)
 3. Input is based will be from a file and all the
 
-
-   
 #### PRE configured InputFile
 
 /input/InputFile.txt
 
-#### Input File Format
+## Input File Format
 ```diff
 
 + Line 1: Grid Dimension.  
@@ -50,4 +54,13 @@ Run as application "ZombieApocalypse.java   <inputFilePath>"
 + Line 3: creatures Locations seperated by space 
        eg. x1,y1 x2,y2 x3,y3 
 + Line 4: Directions for the Zombie. where ==> D: Down, R: Right L:Left and U: UP 
-        eg.DLLURL    
+        eg.DLLURL  
+  ```
+ ## OUTPUT 
+ 
+ Output will be displayed on the console along with the zombie position changes.
+ 
+ 
+ 
+     
+    
