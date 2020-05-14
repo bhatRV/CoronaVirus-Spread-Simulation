@@ -26,7 +26,7 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 
 
 
-#### ASSUMPTIONS AND SCOPE FOR ENHANCEMENT
+## ASSUMPTIONS AND SCOPE FOR ENHANCEMENT
 
 1. Extensive test cases to cover more scenarios can be added
 1. Validations can be enhanced on the inputs. Basic validations are provided for now.
@@ -40,7 +40,7 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 2. Zombie starts moving , and if it finds a creature in its path the creature will be convereted to a new Zombie(Infected)
 3. Input is based will be from a file and all the
 
-#### PRE configured InputFile
+## PRE configured InputFile
 
 /input/InputFile.txt
 
