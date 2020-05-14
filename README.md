@@ -1,10 +1,10 @@
  
 # Project Title: Zombie Apocalypse
 
+This is a simulation of a starnge incident due to a deadly infection. Zombies spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread.
 
-## Author : RASHMI VISHNU
+### Author : RASHMI VISHNU
  
-
 ### Prerequisites
 
 ```
