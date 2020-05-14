@@ -1,7 +1,7 @@
  
 # Project Title: Zombie Apocalypse
 
-This is a simulation of a starnge incident due to a deadly infection. Zombies spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread.
+This is a simulation of a strange incident due to a deadly infection. Zombies spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread.
 
 ### Author : RASHMI VISHNU
  
@@ -56,19 +56,21 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 + Line 4: Directions for the Zombie. where ==> D: Down, R: Right L:Left and U: UP 
         eg.DLLURL  
   ```
-#### Sample File 
+   #### Sample File 
 
-```diff
-4
-1,2
-2,2 0,1 2,1
-DLLDUR
+     ```diff
+     4
+     1,2
+     2,2 0,1 2,1
+     DLLDUR
 
-```
+     ```
 
  ## OUTPUT 
  
- Output will be displayed on the console along with the zombie positions changes.
+ Output will be displayed on the console along with the zombie positions at the end.
+ 
+
  
  
  
