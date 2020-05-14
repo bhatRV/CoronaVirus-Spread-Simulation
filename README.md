@@ -3,9 +3,9 @@
 
 ## Author : RASHMI VISHNU
  
-## SWAGGER URL
+## HOW TO START THE APPLICATION 
 1. Start the application using bootRun, **./gradlew bootRun**
-1. Swagger UI Link : http://localhost:8080/swagger-ui.html#/address-book-controller
+
 
 #### ASSUMPTIONS and SCOPE for ENHANCEMENT
 
@@ -22,7 +22,7 @@
 
 **_To run from Eclipse/IntelliJ_**
 
-Run as application "AddressBookApplication.java"
+Run as application ".java"
 
 **_To build the application_**
 
