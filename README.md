@@ -30,7 +30,7 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 
 1. Extensive test cases to cover more scenarios can be added
 1. Validations can be enhanced on the inputs. Basic validations are provided for now.
-1. User Interface can be provided
+1. User Interface can be provided and input can be as a json
 1. Assumption: Grid's are generated based on the given dimention (1st line in the file), if X is the input the grid/matrix will be a SQUARE MATRIX of X by X
 1. Assumption: Starting point for the grid/matrix is the top Left corner.
 1. Assumption: Input will be provided using a file and the order for the input values will be followed.
@@ -58,7 +58,7 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
   ```
  ## OUTPUT 
  
- Output will be displayed on the console along with the zombie position changes.
+ Output will be displayed on the console along with the zombie positions changes.
  
  
  
