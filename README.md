@@ -59,10 +59,10 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 #### Sample File 
 
 ```diff
-+ 4
-+ 1,2
-+ 2,2 0,1 2,1
-+ DLLDUR
+4
+1,2
+2,2 0,1 2,1
+DLLDUR
 
 ```
 
