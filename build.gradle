@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'war'
+    id 'jacoco'
 }
 
 sourceCompatibility = '1.8'
@@ -18,7 +19,18 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacoco/coverage")
+    }
+}
+
 
 run {
     mainClassName = 'com.ailo.zombie.apocalypse.ZombieApocalypse'
