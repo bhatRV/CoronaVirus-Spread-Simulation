@@ -56,11 +56,22 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 + Line 4: Directions for the Zombie. where ==> D: Down, R: Right L:Left and U: UP 
         eg.DLLURL  
   ```
+#### Sample File 
+
+```
++4
++1,2
++2,2 0,1 2,1
++DLLDUR
+
+```
+
  ## OUTPUT 
  
  Output will be displayed on the console along with the zombie positions changes.
  
  
  
+
      
     
