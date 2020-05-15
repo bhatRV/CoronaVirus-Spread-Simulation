@@ -2,7 +2,7 @@ package com.ailo.zombie.apocalypse.excuters;
 
 import com.ailo.zombie.apocalypse.FinalStatus;
 import com.ailo.zombie.apocalypse.StartInfection;
-import com.ailo.zombie.apocalypse.commands.ZombieMovement;
+import com.ailo.zombie.apocalypse.commands.ZombieMove;
 import com.ailo.zombie.apocalypse.commands.Command;
 import com.ailo.zombie.apocalypse.commands.ZombieStop;
 import com.ailo.zombie.apocalypse.dto.ActiveZombie;
@@ -53,7 +53,7 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                 zombie.setCurrentLocation(path.get(path.size() - 1));
             }
 
-            if (command instanceof ZombieMovement && !path.isEmpty()) {
+            if (command instanceof ZombieMove && !path.isEmpty()) {
                 process(path, zombie);
             } else {
                 setZombiePosition(zombie);
@@ -83,7 +83,7 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                             p.getCoordinateY());
 
                     ZombieGrid[][] newZombiePath = siteMap.clone();
-                    newZombiePath[(int) p.getCoordinateX()][(int) p.getCoordinateY()] = ZombieGrid.builder().type(Type.ZOMBIE).build();
+                    newZombiePath[p.getCoordinateX()][p.getCoordinateY()] = ZombieGrid.builder().type(Type.ZOMBIE).build();
                     DataInput newDataInput = generateInfectedZombieInput(zombie, p);
                     Runnable zombieRunnable = new StartInfection(newZombiePath, newDataInput);
 
@@ -123,7 +123,6 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
     private Coordinates[] getNewCreatureLocation(Coordinates[] currentCreatureLocation, Coordinates infectedCreature) {
         for (int i = 0; i < currentCreatureLocation.length; i++) {
             if (currentCreatureLocation[i].equals(infectedCreature)) {
-                // Using ArrayUtils
                 currentCreatureLocation = ArrayUtils.remove(currentCreatureLocation, i);
                 break;
             }

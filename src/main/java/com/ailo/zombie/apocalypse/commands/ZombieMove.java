@@ -14,11 +14,11 @@ import java.util.stream.IntStream;
  * Calculates the list of positions for Every command. Advances in the Given Direction.
  * Assumption: START FROM NEXT SQUARE, variable step count holds the steps, currently defaults to 1, can be extended
  */
-public class ZombieMovement implements Command {
+public class ZombieMove implements Command {
 
-    private int step;
+    private final int step;
 
-    public ZombieMovement(int step) {
+    public ZombieMove(int step) {
         this.step = step;
     }
 
@@ -29,14 +29,14 @@ public class ZombieMovement implements Command {
             Direction newDirection = null;
             String newRoute = null;
             if (currentLocation.getRoute() != null && !currentLocation.getRoute().isEmpty()) {
-                newDirection = Direction.valueOf(String.valueOf((char) currentLocation.getRoute().charAt(0)));
+                newDirection = Direction.valueOf(String.valueOf(currentLocation.getRoute().charAt(0)));
                 newRoute = currentLocation.getRoute().substring(1);
             }
 
-            int gridLimitX = (int) currentLocation.getGridDimension().getDimension().getX();
-            int gridLimitY = (int) currentLocation.getGridDimension().getDimension().getY();
-            int row = (int) currentLocation.getCoordinateX();
-            int col = (int) currentLocation.getCoordinateY();
+            int gridLimitX = currentLocation.getGridDimension().getDimension().getX();
+            int gridLimitY = currentLocation.getGridDimension().getDimension().getY();
+            int row = currentLocation.getCoordinateX();
+            int col = currentLocation.getCoordinateY();
 
             switch (currentLocation.getDirection()) {
                 case R:

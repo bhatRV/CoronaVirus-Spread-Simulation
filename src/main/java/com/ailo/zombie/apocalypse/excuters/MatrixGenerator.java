@@ -17,7 +17,7 @@ public class MatrixGenerator implements Function<DataInput, ZombieGrid[][]> {
     @Override
     public ZombieGrid[][] apply(DataInput dataInput) throws SimulationException {
 
-        ZombieGrid[][] sqr = new ZombieGrid[(int) dataInput.getGridDimension().getDimension().getX()][(int) dataInput.getGridDimension().getDimension().getY()];
+        ZombieGrid[][] sqr = new ZombieGrid[dataInput.getGridDimension().getDimension().getX()][dataInput.getGridDimension().getDimension().getY()];
 
         for (int x = 0; x < sqr.length; x++) {
             for (int y = 0; y < sqr[x].length; y++) {
@@ -25,11 +25,11 @@ public class MatrixGenerator implements Function<DataInput, ZombieGrid[][]> {
             }
         }
 
-        sqr[(int) dataInput.getActiveZombiePosition().getPosition().getX()][(int) dataInput.getActiveZombiePosition().getPosition().getY()] =
+        sqr[dataInput.getActiveZombiePosition().getPosition().getX()][dataInput.getActiveZombiePosition().getPosition().getY()] =
                 ZombieGrid.builder().type(Type.ZOMBIE).build();
 
         for (Coordinates creature : dataInput.getCreaturesPosition().getPositions()) {
-            sqr[(int) creature.getX()][(int) creature.getY()] =
+            sqr[creature.getX()][creature.getY()] =
                     ZombieGrid.builder().type(Type.CREATURE).build();
         }
         if (logger.isDebugEnabled()) {
