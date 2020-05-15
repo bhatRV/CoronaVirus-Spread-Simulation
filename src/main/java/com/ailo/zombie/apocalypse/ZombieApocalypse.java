@@ -20,7 +20,8 @@ public class ZombieApocalypse {
 
     public static void main(String[] args) throws SimulationException, InterruptedException {
 
-        DataInput dataInput = validateInputs();
+        DataInput dataInput = validateInputs(args);
+
         ZombieGrid[][] matrixZombieGrid = new MatrixGenerator().apply(dataInput);
 
         logger.debug("ZOMBIE INFECTION PATH");
@@ -34,12 +35,17 @@ public class ZombieApocalypse {
         logger.info("Zombies positions [ {} ]", FinalStatus.getZombiesPosition());
     }
 
-    private static DataInput validateInputs() {
+    private static DataInput validateInputs(String[] args) {
         DataInput inputFile = null;
+        String fileName = "inputFile.json";
+
+        if (args.length != 0) {
+            fileName = args[0];
+        }
 
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader("inputFile.json")) {
+        try (FileReader reader = new FileReader(fileName)) {
             //Read JSON file
             JSONObject obj = (JSONObject) jsonParser.parse(reader);
 
@@ -47,6 +53,35 @@ public class ZombieApocalypse {
             JSONArray creatureLocationsJSON = (JSONArray) obj.get("creatureLocations");
             JSONObject gridDimensionJSON = (JSONObject) obj.get("gridDimension");
             String commandJSON = (String) obj.get("command");
+
+            if (null == zombieLocationJSON) {
+                throw new SimulationException("zombieLocation is required!!");
+            }
+            if (null == creatureLocationsJSON) {
+                throw new SimulationException("creatureLocations is required!!");
+            }
+            if (null == gridDimensionJSON) {
+                throw new SimulationException("gridDimension is required!!");
+            }
+            if (commandJSON.isEmpty()) {
+                throw new SimulationException("command is required!!");
+            }
+
+            if (Integer.parseInt((String) zombieLocationJSON.get("x")) >= Integer.parseInt((String) gridDimensionJSON.get("x")) ||
+                    Integer.parseInt((String) zombieLocationJSON.get("y")) >= Integer.parseInt((String) gridDimensionJSON.get("y"))) {
+                throw new SimulationException("coordinates beyond the dimension!!");
+            }
+
+            IntStream.range(0, creatureLocationsJSON.size())
+                    .forEach(idx ->
+                            {
+                                JSONObject creature = (JSONObject) creatureLocationsJSON.get(idx);
+                                if (Integer.parseInt((String) creature.get("x")) >= Integer.parseInt((String) gridDimensionJSON.get("x")) ||
+                                        Integer.parseInt((String) creature.get("y")) >= Integer.parseInt((String) gridDimensionJSON.get("y"))) {
+                                    throw new SimulationException("coordinates beyond the dimension!!");
+                                }
+                            }
+                    );
 
             Coordinates gridDimensionCoordinates = Coordinates.builder()
                     .x(Integer.parseInt((String) gridDimensionJSON.get("x")))
@@ -84,6 +119,7 @@ public class ZombieApocalypse {
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
+            throw new SimulationException("ParseException | IOException caught!!");
         }
 
         return inputFile;
