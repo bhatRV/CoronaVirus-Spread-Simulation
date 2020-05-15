@@ -2,18 +2,22 @@ package com.ailo.zombie.apocalypse.excuters;
 
 import com.ailo.zombie.apocalypse.FinalStatus;
 import com.ailo.zombie.apocalypse.StartInfection;
-import com.ailo.zombie.apocalypse.commands.AdvanceCommand;
+import com.ailo.zombie.apocalypse.commands.ZombieMovement;
 import com.ailo.zombie.apocalypse.commands.Command;
-import com.ailo.zombie.apocalypse.commands.QuitCommand;
-import com.ailo.zombie.apocalypse.entities.Location;
-import com.ailo.zombie.apocalypse.entities.Zombie;
-import com.ailo.zombie.apocalypse.entities.ZombieGrid;
-import com.ailo.zombie.apocalypse.entities.enums.Type;
+import com.ailo.zombie.apocalypse.commands.ZombieStop;
+import com.ailo.zombie.apocalypse.dto.ActiveZombie;
+import com.ailo.zombie.apocalypse.dto.Coordinates;
+import com.ailo.zombie.apocalypse.dto.Creatures;
+import com.ailo.zombie.apocalypse.dto.DataInput;
+import com.ailo.zombie.apocalypse.dto.Location;
+import com.ailo.zombie.apocalypse.dto.Zombie;
+import com.ailo.zombie.apocalypse.dto.ZombieGrid;
+import com.ailo.zombie.apocalypse.dto.enums.Type;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -33,13 +37,15 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
         zombie.getCommandList().add(command);
 
-        List<String> lines = zombie.getLines();
-        String currentZombieLocation = lines.get(1);
+        DataInput dataInput = zombie.getDataInput();
+//        List<String> lines = zombie.getLines();
+        String currentZombieLocation = dataInput.getActiveZombiePosition().getPosition().getX() + "," + dataInput.getActiveZombiePosition().getPosition().getY();
         logger.debug("{} :: zombies CurrentLocation [ ({},{}) ]",
                 currentZombieLocation,
-                zombie.getCurrentLocation().getX(),
-                zombie.getCurrentLocation().getY());
-        if (zombie.getCurrentLocation() != null && !(command instanceof QuitCommand)) {
+                dataInput.getActiveZombiePosition().getPosition().getX(),
+                dataInput.getActiveZombiePosition().getPosition().getY());
+
+        if (zombie.getCurrentLocation() != null && !(command instanceof ZombieStop)) {
 
             List<Location> path = command.apply(zombie.getCurrentLocation());
 
@@ -47,7 +53,7 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                 zombie.setCurrentLocation(path.get(path.size() - 1));
             }
 
-            if (command instanceof AdvanceCommand && !path.isEmpty()) {
+            if (command instanceof ZombieMovement && !path.isEmpty()) {
                 process(path, zombie);
             } else {
                 setZombiePosition(zombie);
@@ -60,26 +66,26 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
     private void setZombiePosition(Zombie zombie) {
         String zombiePosition = FinalStatus.getZombiesPosition();
-        zombiePosition = zombiePosition.concat("(" + zombie.getCurrentLocation().getX() + "," + zombie.getCurrentLocation().getY() + ")");
+        zombiePosition = zombiePosition.concat("(" + zombie.getDataInput().getActiveZombiePosition().getPosition().getX() + "," + zombie.getDataInput().getActiveZombiePosition().getPosition().getY() + ")");
         FinalStatus.setZombiesPosition(zombiePosition);
     }
 
     private void process(List<Location> locations, Zombie zombie) {
         locations.forEach(p -> {
             try {
-                ZombieGrid zombieGrid = siteMap[p.getX()][p.getY()];
+                ZombieGrid zombieGrid = siteMap[(int) p.getCoordinateX()][(int) p.getCoordinateY()];
 
                 if (zombieGrid.getType() == Type.CREATURE) {
                     zombieGrid.setInfected(true);
                     logger.debug("{} :: converted to Zombie at [ ({},{}) ]",
                             zombieGrid.getType().name(),
-                            p.getX(),
-                            p.getY());
+                            p.getCoordinateX(),
+                            p.getCoordinateY());
 
                     ZombieGrid[][] newZombiePath = siteMap.clone();
-                    newZombiePath[p.getX()][p.getY()] = new ZombieGrid(Type.ZOMBIE);
-                    List<String> lines = generateInfectedZombieInput(zombie, p);
-                    Runnable zombieRunnable = new StartInfection(newZombiePath, lines);
+                    newZombiePath[(int) p.getCoordinateX()][(int) p.getCoordinateY()] = ZombieGrid.builder().type(Type.ZOMBIE).build();
+                    DataInput newDataInput = generateInfectedZombieInput(zombie, p);
+                    Runnable zombieRunnable = new StartInfection(newZombiePath, newDataInput);
 
                     Thread zombieThread = new Thread(zombieRunnable);
                     zombieThread.setDaemon(true);
@@ -98,13 +104,30 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
     }
 
-    private List<String> generateInfectedZombieInput(Zombie zombie, Location p) {
-        List<String> lines = new ArrayList<String>(zombie.getLines());
-        String creatureLocation = lines.get(2);
-        String regex = p.getX() + "," + p.getY();
-        String newCreatureLocation = creatureLocation.replaceAll(regex, "");
-        lines.set(1, p.getX() + "," + p.getY());
-        lines.set(2, newCreatureLocation);
-        return lines;
+    private DataInput generateInfectedZombieInput(Zombie zombie, Location p) {
+
+        DataInput dataInput = DataInput.builder().build();
+        Coordinates newZombieCoordinates = Coordinates.builder().x(p.getCoordinateX()).y(p.getCoordinateY()).build();
+        Coordinates[] newCreatureLocation = getNewCreatureLocation(zombie.getDataInput().getCreaturesPosition().getPositions(), newZombieCoordinates);
+        Creatures newCreature = Creatures.builder().positions(newCreatureLocation).build();
+        ActiveZombie newActiveZombie = ActiveZombie.builder().position(newZombieCoordinates).build();
+
+        dataInput.setGridDimension(zombie.getDataInput().getGridDimension());
+        dataInput.setCommand(zombie.getDataInput().getCommand());
+        dataInput.setCreaturesPosition(newCreature);
+        dataInput.setActiveZombiePosition(newActiveZombie);
+
+        return dataInput;
+    }
+
+    private Coordinates[] getNewCreatureLocation(Coordinates[] currentCreatureLocation, Coordinates infectedCreature) {
+        for (int i = 0; i < currentCreatureLocation.length; i++) {
+            if (currentCreatureLocation[i].equals(infectedCreature)) {
+                // Using ArrayUtils
+                currentCreatureLocation = ArrayUtils.remove(currentCreatureLocation, i);
+                break;
+            }
+        }
+        return currentCreatureLocation;
     }
 }

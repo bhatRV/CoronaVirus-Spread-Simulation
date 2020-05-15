@@ -1,16 +1,16 @@
 package com.ailo.zombie.apocalypse.commands;
 
 
-import com.ailo.zombie.apocalypse.entities.Location;
+import com.ailo.zombie.apocalypse.dto.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuitCommand implements Command {
+public class ZombieStop implements Command {
 
     private String reason;
 
-    public QuitCommand(String reason) {
+    public ZombieStop(String reason) {
         this.reason = reason;
     }
 

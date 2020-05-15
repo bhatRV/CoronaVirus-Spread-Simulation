@@ -1,7 +1,7 @@
 package com.ailo.zombie.apocalypse.commands;
 
 
-import com.ailo.zombie.apocalypse.entities.Location;
+import com.ailo.zombie.apocalypse.dto.Location;
 
 import java.util.List;
 

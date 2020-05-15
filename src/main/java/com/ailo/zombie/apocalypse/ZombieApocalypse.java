@@ -1,24 +1,30 @@
 package com.ailo.zombie.apocalypse;
 
-import com.ailo.zombie.apocalypse.entities.ZombieGrid;
+import com.ailo.zombie.apocalypse.dto.*;
+import com.ailo.zombie.apocalypse.dto.ZombieGrid;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
 import com.ailo.zombie.apocalypse.excuters.MatrixGenerator;
-import com.ailo.zombie.apocalypse.input.ReadInputs;
-import com.ailo.zombie.apocalypse.utils.Constants;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.stream.IntStream;
 
 public class ZombieApocalypse {
     private static final Logger logger = LoggerFactory.getLogger(ZombieApocalypse.class);
+
     public static void main(String[] args) throws SimulationException, InterruptedException {
 
-        List<String> lines = validateInputs(args);
-        ZombieGrid[][] matrixZombieGrid = new MatrixGenerator().apply(lines);
+        DataInput dataInput = validateInputs();
+        ZombieGrid[][] matrixZombieGrid = new MatrixGenerator().apply(dataInput);
 
         logger.debug("ZOMBIE INFECTION PATH");
-        Runnable zombie = new StartInfection(matrixZombieGrid, lines);
+        Runnable zombie = new StartInfection(matrixZombieGrid, dataInput);
         Thread zombieThread = new Thread(zombie);
         zombieThread.setDaemon(true);
         zombieThread.start();
@@ -28,25 +34,59 @@ public class ZombieApocalypse {
         logger.info("Zombies positions [ {} ]", FinalStatus.getZombiesPosition());
     }
 
-    private static List<String> validateInputs(String[] args) {
-        if (args.length == 0) {
-            throw new SimulationException("Input file missing!!");
-        }
-//        System.out.println("Provide a valid fileName with all the inputs: \ninput file format\n "
-//                + "<Line-1: Grid Dimension( eg, 4)> \n "
-//                + "<Line 2: Zombie Location (eg. x,y) >\n "
-//                + "<Line 3: creatures Locations (eg. x1,y1 x2,y2 x3,y3) >\n "
-//                + "<Line4: Directions for the Zombie eg.DLLURL (where D: Down, R: Right L:Left and U: UP)>    ");
-        List<String> lines = new ReadInputs().apply(args[0]);
-        if (lines.get(0).isEmpty() || !lines.get(0).matches(Constants.ARRAY_DIMENSION)) {
-            throw new SimulationException("Invalid Dimension : " + lines.get(0));
-        }
-        if (!lines.get(3).matches(Constants.COMMAND_PATTERN_REGX)) {
-            throw new SimulationException("Invalid Input provided :" + lines.get(3));
+    private static DataInput validateInputs() {
+        DataInput inputFile = null;
+
+        //JSON parser object to parse read file
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("inputFile.json")) {
+            //Read JSON file
+            JSONObject obj = (JSONObject) jsonParser.parse(reader);
+
+            JSONObject zombieLocationJSON = (JSONObject) obj.get("zombieLocation");
+            JSONArray creatureLocationsJSON = (JSONArray) obj.get("creatureLocations");
+            JSONObject gridDimensionJSON = (JSONObject) obj.get("gridDimension");
+            String commandJSON = (String) obj.get("command");
+
+            Coordinates gridDimensionCoordinates = Coordinates.builder()
+                    .x((Long) gridDimensionJSON.get("x"))
+                    .y((Long) gridDimensionJSON.get("y"))
+                    .build();
+            GridDimension gridDimension = GridDimension.builder().dimension(gridDimensionCoordinates).build();
+
+            Coordinates zombieCoordinates = Coordinates.builder()
+                    .x((Long) zombieLocationJSON.get("x"))
+                    .y((Long) zombieLocationJSON.get("y"))
+                    .build();
+
+            Coordinates[] list = new Coordinates[creatureLocationsJSON.size()];
+
+            IntStream.range(0, creatureLocationsJSON.size())
+                    .forEach(idx ->
+                            {
+                                JSONObject creature = (JSONObject) creatureLocationsJSON.get(idx);
+                                Coordinates creatureLocationCoordinates = Coordinates.builder()
+                                        .x((Long) creature.get("x"))
+                                        .y((Long) creature.get("y"))
+                                        .build();
+                                list[idx] = creatureLocationCoordinates;
+                            }
+                    );
+            Creatures creatureLocations = Creatures.builder().positions(list).build();
+            ActiveZombie activeZombie = ActiveZombie.builder().position(zombieCoordinates).build();
+
+            inputFile = DataInput.builder()
+                    .gridDimension(gridDimension)
+                    .activeZombiePosition(activeZombie)
+                    .creaturesPosition(creatureLocations)
+                    .command(commandJSON)
+                    .build();
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
         }
 
-        return lines;
-
+        return inputFile;
     }
 
 

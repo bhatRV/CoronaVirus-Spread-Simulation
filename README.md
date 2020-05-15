@@ -69,7 +69,7 @@ Run as application "ZombieApocalypse.java  <inputFilePath>"
 
  ## OUTPUT 
  
- Output will be displayed on the console along with the zombie positions at the end.
+ Output will be displayed on the console along with the activeZombie positions at the end.
  
 
  
