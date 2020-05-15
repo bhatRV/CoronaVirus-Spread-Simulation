@@ -12,21 +12,6 @@ Java 1.8
 ```
 ## RUNNING THE SIMULATION
 
-**_To run from Eclipse/IntelliJ_**
-
-```diff
-(To run simulation using the sample inputs)
-RUN: ZombieApocalypse.java 
-```
-
-**_To Run with custom inputs from intelliJ_**:
-```diff
-
-"ZombieApocalypse.java  <inputFilePath>"
-   eg. ZombieApocalypse.java inputFile.json
-
-```
-
 **_To Run with the jar from command prompt_**:
 
 ```diff
@@ -41,6 +26,22 @@ To run with  custom input
    java -jar ./build/libs/zombie-apocalypse-simulation.jar <fileName>
       
 ```
+**_To run from Eclipse/IntelliJ interface_**
+
+```diff
+
+(To run simulation using the sample inputs)
+ ZombieApocalypse.java 
+
+(To run with  custom input)
+```diff
+
+"ZombieApocalypse.java  <inputFilePath>"
+   eg. ZombieApocalypse.java inputFile.json
+
+```
+
+
 **_To build the application_**
 ```diff
 ./gradlew clean build
