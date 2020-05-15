@@ -34,7 +34,6 @@ To run with  custom input
  ZombieApocalypse.java 
 
 (To run with  custom input)
-```diff
 
 "ZombieApocalypse.java  <inputFilePath>"
    eg. ZombieApocalypse.java inputFile.json
@@ -59,13 +58,8 @@ Then to Start the simulation using default input File which has pre populated te
 1. Assumption: Grid's are generated based on the given dimention (1st line in the file), if X is the input the grid/matrix will be a SQUARE MATRIX of X by X
 1. Assumption: Starting point for the grid/matrix is the top Left corner.
 1. Assumption: Input will be provided using a file as Json
- 
-#### Scenarios covered
-1. Zombie can start from any location in the grid
-2. Zombie starts moving , and if it finds a creature in its path the creature will be convereted to a new Zombie(Infected)
-3. Input is based will be from a file and all the
 
-## Pre configured InputFile and It's Format
+## Pre configured Input File and It's Format
 
 FileName: inputFile.json
 
@@ -118,9 +112,10 @@ Format:
  
  
   ```diff
- ## 19:06:40.121 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - CONSOLIDATED POINTS TALLY
- ## 19:06:40.121 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies score : [ 3 ]
- ## 19:06:40.121 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies positions [ (1,2)(0,1)(3,1)(2,1) ]
+=======================POINTS TALLY=================
+20:35:46.581 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies score : [ 3 ]
+20:35:46.582 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies positions [ (1,2)(0,1)(3,1)(2,1) ]
+
  ```
 
  ## ADDITIONAL INFORMATION

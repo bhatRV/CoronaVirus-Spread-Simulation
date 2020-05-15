@@ -32,7 +32,7 @@ public class ZombieApocalypse {
         //zombieThread.setDaemon(true);
         zombieThread.start();
         zombieThread.join();
-        logger.info("CONSOLIDATED POINTS TALLY");
+        logger.info("\n=======================POINTS TALLY=================");
         logger.info("Zombies score : [ {} ]", FinalStatus.getZombiesCount());
         logger.info("Zombies positions [ {} ]", FinalStatus.getZombiesPosition());
     }

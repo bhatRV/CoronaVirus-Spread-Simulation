@@ -230,4 +230,21 @@ class ZombieApocalypseTest {
             fail("Should throw SimulationException");
         }
     }
+
+
+    @Test
+    public void testZombieApocalypse_success_withNonSquareGrid() {
+        String inputData = "{\"gridDimension\": {\"x\": \"8\",\"y\": \"4\"}," +
+                "\"zombieLocation\":{\"x\": \"2\",\"y\": \"1\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"2\"},{\"x\": \"3\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"1\"},{\"x\": \"2\",\"y\": \"2\"}]," +
+                "\"command\":\"DLUURR\"}";
+        createTestData(inputData);
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            assertEquals(5, FinalStatus.getZombiesCount());
+            assertEquals("(3,1)(2,2)(1,2)(0,1)(1,1)(2,1)", FinalStatus.getZombiesPosition());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
