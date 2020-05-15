@@ -48,23 +48,6 @@ jacocoTestReport {
     }
 }
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            element = 'CLASS'
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 1.0
-            }
-            excludes = [
-                    'io.reflectoring.coverage.part.PartlyCovered',
-                    'io.reflectoring.coverage.ignored.*',
-                    'io.reflectoring.coverage.part.NotCovered'
-            ]
-        }
-    }
-}
 run {
     mainClassName = 'com.ailo.zombie.apocalypse.ZombieApocalypse'
     standardInput = System.in
