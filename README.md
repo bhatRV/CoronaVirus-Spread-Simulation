@@ -13,23 +13,42 @@ Java 1.8
 ## RUNNING THE SIMULATION
 
 **_To run from Eclipse/IntelliJ_**
+
+```diff
 (To run simulation using the sample inputs)
 RUN: ZombieApocalypse.java 
+```
 
 **_To Run with custom inputs from intelliJ_**:
+```diff
 
 "ZombieApocalypse.java  <inputFilePath>"
    eg. ZombieApocalypse.java inputFile.json
 
-**_To build the application_**
+```
 
-**./gradlew clean build
+**_To Run with the jar from command prompt_**:
+
+```diff
+
+Build the project using the below command
+   ./gradlew clean build
+
+To run with  default input use the below command: 
+   java -jar ./build/libs/zombie-apocalypse-simulation.jar
+
+To run with  custom input
+   java -jar ./build/libs/zombie-apocalypse-simulation.jar <fileName>
+      
+```
+**_To build the application_**
+```diff
+./gradlew clean build
 
 Then to Start the simulation using default input File which has pre populated test data
-  **./gradlew run
-
-
-
+ ./gradlew run
+  
+```
 ## ASSUMPTIONS AND SCOPE FOR ENHANCEMENT
 
 1. Extensive test cases to cover more scenarios can be added
