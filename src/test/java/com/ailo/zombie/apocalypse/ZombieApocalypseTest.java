@@ -81,8 +81,43 @@ class ZombieApocalypseTest {
     }
 
     @Test
+    public void testZombieApocalypse_success_Edge1() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"zombieLocation\":{\"x\": \"0\",\"y\": \"0\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"0\"},{\"x\": \"1\",\"y\": \"1\"}]," +
+                "\"command\":\"DL\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            assertEquals(3, FinalStatus.getZombiesCount());
+            assertEquals("(1,1)(0,1)(1,0)(0,0)", FinalStatus.getZombiesPosition());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testZombieApocalypse_success_Edge2() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"zombieLocation\":{\"x\": \"0\",\"y\": \"0\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"0\"},{\"x\": \"1\",\"y\": \"1\"}]," +
+                "\"command\":\"DR\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            assertEquals(3, FinalStatus.getZombiesCount());
+            assertEquals("(1,1)(0,1)(1,0)(0,0)", FinalStatus.getZombiesPosition());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testZombieApocalypse_error_wrongDimension() {
-        createTestData(new String("\n2,1\n0,1 1,2 3,1 1,1 2,2\nD"));
         String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
                 "\"zombieLocation\":{\"x\": \"0\",\"y\": \"0\"}," +
                 "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"2\"},{\"x\": \"3\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"1\"},{\"x\": \"2\",\"y\": \"2\"}]," +
@@ -94,6 +129,91 @@ class ZombieApocalypseTest {
             fail("Should throw SimulationException");
         } catch (SimulationException se) {
             assertTrue(se.getMessage().startsWith("coordinates beyond the dimension"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
+
+    @Test
+    public void testZombieApocalypse_validation_missingDimension() {
+        String inputData = "{\"zombieLocation\":{\"x\": \"0\",\"y\": \"0\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"2\"},{\"x\": \"3\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"1\"},{\"x\": \"2\",\"y\": \"2\"}]," +
+                "\"command\":\"D\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("gridDimension is required"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
+    @Test
+    public void testZombieApocalypse_validation_missingZombieLocation() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"0\"},{\"x\": \"1\",\"y\": \"1\"}]," +
+                "\"command\":\"DR\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("zombieLocation is required"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
+
+    @Test
+    public void testZombieApocalypse_validation_missingCreatureLocations() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"zombieLocation\":{\"x\": \"0\",\"y\": \"0\"}," +
+                "\"command\":\"DR\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("creatureLocations is required"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
+    @Test
+    public void testZombieApocalypse_validation_coordinateBeyondDimension() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"zombieLocation\":{\"x\": \"3\",\"y\": \"1\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"3\"},{\"x\": \"1\",\"y\": \"0\"},{\"x\": \"1\",\"y\": \"1\"}]," +
+                "\"command\":\"DR\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("coordinates beyond the dimension"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
+
+    @Test
+    public void testZombieApocalypse_validation_invalidCommand() {
+        String inputData = "{\"gridDimension\": {\"x\": \"2\",\"y\": \"2\"}," +
+                "\"zombieLocation\":{\"x\": \"1\",\"y\": \"1\"}," +
+                "\"creatureLocations\":[{\"x\": \"0\",\"y\": \"1\"},{\"x\": \"1\",\"y\": \"0\"},{\"x\": \"1\",\"y\": \"1\"}]," +
+                "\"command\":\"AS\"}";
+        createTestData(inputData);
+
+        try {
+            ZombieApocalypse.main(new String[]{"testInput.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("Unknown command, command should match regex"));
         } catch (InterruptedException e) {
             fail("Should throw SimulationException");
         }
