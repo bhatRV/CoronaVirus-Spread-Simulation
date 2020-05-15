@@ -1,4 +1,4 @@
-package com.ailo.zombie.apocalypse.entities.enums;
+package com.ailo.zombie.apocalypse.dto.enums;
 
 public enum Direction {
     U('U'),  //up

@@ -10,6 +10,5 @@ public class CommandReader {
         return (command+"Q").codePoints()
                 .mapToObj(c -> String.valueOf((char) c));
     }
-
 }
 

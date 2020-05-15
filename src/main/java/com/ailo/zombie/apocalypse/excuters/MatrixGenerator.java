@@ -1,38 +1,36 @@
 package com.ailo.zombie.apocalypse.excuters;
 
-import com.ailo.zombie.apocalypse.entities.ZombieGrid;
-import com.ailo.zombie.apocalypse.entities.enums.Type;
+import com.ailo.zombie.apocalypse.dto.Coordinates;
+import com.ailo.zombie.apocalypse.dto.DataInput;
+import com.ailo.zombie.apocalypse.dto.ZombieGrid;
+import com.ailo.zombie.apocalypse.dto.enums.Type;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.function.Function;
 
 
-public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
+public class MatrixGenerator implements Function<DataInput, ZombieGrid[][]> {
     private static final Logger logger = LoggerFactory.getLogger(MatrixGenerator.class);
 
     @Override
-    public ZombieGrid[][] apply(List<String> lines) throws SimulationException {
+    public ZombieGrid[][] apply(DataInput dataInput) throws SimulationException {
 
-        ZombieGrid[][] sqr = new ZombieGrid[Integer.parseInt(lines.get(0))][Integer.parseInt(lines.get(0))];
+        ZombieGrid[][] sqr = new ZombieGrid[dataInput.getGridDimension().getDimension().getX()][dataInput.getGridDimension().getDimension().getY()];
 
         for (int x = 0; x < sqr.length; x++) {
-            for (int y = 0; y < sqr[0].length; y++) {
-                sqr[x][y] = new ZombieGrid(Type.NONE);
+            for (int y = 0; y < sqr[x].length; y++) {
+                sqr[x][y] = ZombieGrid.builder().type(Type.NONE).build();
             }
         }
 
-        sqr[Integer.parseInt(lines.get(1).split(",")[0])][Integer.parseInt(lines.get(1).split(",")[1])] =
-                new ZombieGrid(Type.ZOMBIE);
-        String[] creatures = lines.get(2).split(" ");
+        sqr[dataInput.getActiveZombiePosition().getPosition().getX()][dataInput.getActiveZombiePosition().getPosition().getY()] =
+                ZombieGrid.builder().type(Type.ZOMBIE).build();
 
-        for (String creature : creatures) {
-            if (!creature.isEmpty()) {
-                sqr[Integer.parseInt(creature.split(",")[0])][Integer.parseInt(creature.split(",")[1])] =
-                        new ZombieGrid(Type.CREATURE);
-            }
+        for (Coordinates creature : dataInput.getCreaturesPosition().getPositions()) {
+            sqr[creature.getX()][creature.getY()] =
+                    ZombieGrid.builder().type(Type.CREATURE).build();
         }
         if (logger.isDebugEnabled()) {
             printGrid(sqr);
@@ -45,12 +43,11 @@ public class MatrixGenerator implements Function<List<String>, ZombieGrid[][]> {
         for (int x = 0; x < matrix.length; x++) {
             for (int y = 0; y < matrix[x].length; y++) {
                 if (y == 0 || y % (matrix.length - 1) != 0) {
-                    System.out.print(String.format("%10s", matrix[x][y]) + "(" + x + "," + y + ") | ");
+                    System.out.print(String.format("%10s", matrix[x][y].getType()) + "(" + x + "," + y + ") | ");
                 } else {
-                    System.out.println(String.format("%10s", matrix[x][y]) + "(" + x + "," + y + ") | ");
+                    System.out.println(String.format("%10s", matrix[x][y].getType()) + "(" + x + "," + y + ") | ");
                 }
             }
         }
     }
-
 }

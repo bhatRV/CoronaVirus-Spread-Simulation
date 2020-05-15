@@ -1,8 +1,8 @@
 package com.ailo.zombie.apocalypse.commands;
 
 
-import com.ailo.zombie.apocalypse.entities.Location;
-import com.ailo.zombie.apocalypse.entities.enums.Direction;
+import com.ailo.zombie.apocalypse.dto.Location;
+import com.ailo.zombie.apocalypse.dto.enums.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import java.util.stream.IntStream;
  * Calculates the list of positions for Every command. Advances in the Given Direction.
  * Assumption: START FROM NEXT SQUARE, variable step count holds the steps, currently defaults to 1, can be extended
  */
-public class AdvanceCommand implements Command {
+public class ZombieMove implements Command {
 
-    private int step;
+    private final int step;
 
-    public AdvanceCommand(int step) {
+    public ZombieMove(int step) {
         this.step = step;
     }
 
@@ -29,25 +29,32 @@ public class AdvanceCommand implements Command {
             Direction newDirection = null;
             String newRoute = null;
             if (currentLocation.getRoute() != null && !currentLocation.getRoute().isEmpty()) {
-                newDirection = Direction.valueOf(String.valueOf((char) currentLocation.getRoute().charAt(0)));
+                newDirection = Direction.valueOf(String.valueOf(currentLocation.getRoute().charAt(0)));
                 newRoute = currentLocation.getRoute().substring(1);
             }
 
-            int gridLimit = currentLocation.getGridLimit();
-            int row = currentLocation.getX();
-            int col = currentLocation.getY();
+            int gridLimitX = currentLocation.getGridDimension().getDimension().getX();
+            int gridLimitY = currentLocation.getGridDimension().getDimension().getY();
+            int row = currentLocation.getCoordinateX();
+            int col = currentLocation.getCoordinateY();
 
             switch (currentLocation.getDirection()) {
                 case R:
-                    Direction finalNewDirection = newDirection;
                     String finalNewRoute = newRoute;
+                    Direction finalNewDirection = newDirection;
                     return IntStream.iterate(col - 1, i -> 1)
                             .limit(step)
                             .mapToObj(i -> {
                                 if (i < 0) {
-                                    i = gridLimit - 1;
+                                    i = gridLimitY - 1;
                                 }
-                                return new Location(row, i, finalNewDirection, finalNewRoute, gridLimit);
+                                return Location.builder()
+                                        .coordinateX(row)
+                                        .coordinateY(i)
+                                        .direction(finalNewDirection)
+                                        .route(finalNewRoute)
+                                        .gridDimension(currentLocation.getGridDimension())
+                                        .build();
                             })
                             .collect(Collectors.toList());
                 case L:
@@ -56,10 +63,16 @@ public class AdvanceCommand implements Command {
                     return IntStream.iterate(col + 1, i -> 1)
                             .limit(step)
                             .mapToObj(i -> {
-                                if (i >= gridLimit) {
+                                if (i >= gridLimitY) {
                                     i = 0;
                                 }
-                                return new Location(row, i, finalNewDirection1, finalNewRoute1, gridLimit);
+                                return Location.builder()
+                                        .coordinateX(row)
+                                        .coordinateY(i)
+                                        .direction(finalNewDirection1)
+                                        .route(finalNewRoute1)
+                                        .gridDimension(currentLocation.getGridDimension())
+                                        .build();
                             })
                             .collect(Collectors.toList());
                 case D:
@@ -70,9 +83,15 @@ public class AdvanceCommand implements Command {
                             .mapToObj(i ->
                             {
                                 if (i < 0) {
-                                    i = gridLimit - 1;
+                                    i = gridLimitX - 1;
                                 }
-                                return new Location(i, col, finalNewDirection2, finalNewRoute2, gridLimit);
+                                return Location.builder()
+                                        .coordinateX(i)
+                                        .coordinateY(col)
+                                        .direction(finalNewDirection2)
+                                        .route(finalNewRoute2)
+                                        .gridDimension(currentLocation.getGridDimension())
+                                        .build();
                             })
                             .collect(Collectors.toList());
                 case U:
@@ -81,10 +100,16 @@ public class AdvanceCommand implements Command {
                     return IntStream.iterate(row + 1, i -> 1)
                             .limit(step)
                             .mapToObj(i -> {
-                                if (i >= gridLimit) {
+                                if (i >= gridLimitX) {
                                     i = 0;
                                 }
-                                return new Location(i, col, finalNewDirection3, finalNewRoute3, gridLimit);
+                                return Location.builder()
+                                        .coordinateX(i)
+                                        .coordinateY(col)
+                                        .direction(finalNewDirection3)
+                                        .route(finalNewRoute3)
+                                        .gridDimension(currentLocation.getGridDimension())
+                                        .build();
                             })
                             .collect(Collectors.toList());
                 default:
