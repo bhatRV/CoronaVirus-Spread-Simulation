@@ -120,7 +120,7 @@ Format:
 
  ## ADDITIONAL INFORMATION
  
-1. Testreports can be found at:
+1. Test reports can be found at:
  build/reports/tests/test/index.html
  
   
