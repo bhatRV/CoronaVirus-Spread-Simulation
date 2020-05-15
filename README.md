@@ -52,6 +52,7 @@ Then to Start the simulation using default input File which has pre populated te
 ```
 ## ASSUMPTIONS AND SCOPE FOR ENHANCEMENT
 
+1. Default Log level is at INFO, and can be configured from resources/logback.xml 
 1. Extensive test cases to cover more scenarios can be added
 1. Validations can be enhanced on the inputs. Basic validations have been provided for now.
 1. User Interface can be provided currently uses input as json from a file
@@ -122,9 +123,16 @@ Format:
  ## 19:06:40.121 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies positions [ (1,2)(0,1)(3,1)(2,1) ]
  ```
 
+ ## ADDITIONAL INFORMATION
  
+1. Testreports can be found at:
+ build/reports/tests/test/index.html
  
- 
+  
+2. Coverage reports can be found at :
+   build/jacoco/coverage/index.html
+   
+3. Default Log level is at INFO, change to DEBUG for more details
 
-     
+      
     
