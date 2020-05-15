@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class Coordinates {
-    long x;
-    long y;
+    int x;
+    int y;
 }

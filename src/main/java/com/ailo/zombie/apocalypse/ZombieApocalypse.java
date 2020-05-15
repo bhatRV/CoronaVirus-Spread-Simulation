@@ -49,14 +49,14 @@ public class ZombieApocalypse {
             String commandJSON = (String) obj.get("command");
 
             Coordinates gridDimensionCoordinates = Coordinates.builder()
-                    .x((Long) gridDimensionJSON.get("x"))
-                    .y((Long) gridDimensionJSON.get("y"))
+                    .x(Integer.parseInt((String) gridDimensionJSON.get("x")))
+                    .y(Integer.parseInt((String) gridDimensionJSON.get("y")))
                     .build();
             GridDimension gridDimension = GridDimension.builder().dimension(gridDimensionCoordinates).build();
 
             Coordinates zombieCoordinates = Coordinates.builder()
-                    .x((Long) zombieLocationJSON.get("x"))
-                    .y((Long) zombieLocationJSON.get("y"))
+                    .x(Integer.parseInt((String) zombieLocationJSON.get("x")))
+                    .y(Integer.parseInt((String) zombieLocationJSON.get("y")))
                     .build();
 
             Coordinates[] list = new Coordinates[creatureLocationsJSON.size()];
@@ -66,8 +66,8 @@ public class ZombieApocalypse {
                             {
                                 JSONObject creature = (JSONObject) creatureLocationsJSON.get(idx);
                                 Coordinates creatureLocationCoordinates = Coordinates.builder()
-                                        .x((Long) creature.get("x"))
-                                        .y((Long) creature.get("y"))
+                                        .x(Integer.parseInt((String) creature.get("x")))
+                                        .y(Integer.parseInt((String) creature.get("y")))
                                         .build();
                                 list[idx] = creatureLocationCoordinates;
                             }

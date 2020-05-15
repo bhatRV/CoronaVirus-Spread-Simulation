@@ -9,8 +9,8 @@ import lombok.Data;
 @Builder
 public class Location {
 
-    private final long coordinateX;
-    private final long coordinateY;
+    private final int coordinateX;
+    private final int coordinateY;
     private Direction direction;
     private String route;
     private GridDimension gridDimension;
