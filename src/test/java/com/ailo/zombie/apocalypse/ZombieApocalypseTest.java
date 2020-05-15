@@ -1,23 +1,19 @@
 package com.ailo.zombie.apocalypse;
 
 import com.ailo.zombie.apocalypse.exception.SimulationException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ZombieApocalypseTest {
 
     @BeforeEach
-    public void initEach() throws IOException {
+    public void initEach() {
         FinalStatus.setZombiesCount(0);
         FinalStatus.setZombiesPosition("");
     }
