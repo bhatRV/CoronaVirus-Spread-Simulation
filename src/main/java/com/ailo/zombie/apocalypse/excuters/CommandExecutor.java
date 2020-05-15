@@ -25,6 +25,7 @@ import java.util.function.BiFunction;
  * Applies the direction command on the Zombie, gets the list of the infections, validates and keeps track of points scored.
  */
 public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
+
     private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
     private final ZombieGrid[][] siteMap;
 
@@ -38,7 +39,6 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
         zombie.getCommandList().add(command);
 
         DataInput dataInput = zombie.getDataInput();
-//        List<String> lines = zombie.getLines();
         String currentZombieLocation = dataInput.getActiveZombiePosition().getPosition().getX() + "," + dataInput.getActiveZombiePosition().getPosition().getY();
         logger.debug("{} :: zombies CurrentLocation [ ({},{}) ]",
                 currentZombieLocation,
