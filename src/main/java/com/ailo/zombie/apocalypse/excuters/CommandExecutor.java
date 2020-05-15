@@ -55,8 +55,6 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
 
             if (command instanceof ZombieMove && !path.isEmpty()) {
                 process(path, zombie);
-            } else {
-                setZombiePosition(zombie);
             }
         } else {
             setZombiePosition(zombie);

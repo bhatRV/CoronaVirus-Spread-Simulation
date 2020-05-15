@@ -4,6 +4,7 @@ import com.ailo.zombie.apocalypse.dto.*;
 import com.ailo.zombie.apocalypse.dto.ZombieGrid;
 import com.ailo.zombie.apocalypse.exception.SimulationException;
 import com.ailo.zombie.apocalypse.excuters.MatrixGenerator;
+import com.ailo.zombie.apocalypse.utils.Constants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class ZombieApocalypse {
@@ -63,8 +65,12 @@ public class ZombieApocalypse {
             if (null == gridDimensionJSON) {
                 throw new SimulationException("gridDimension is required!!");
             }
-            if (commandJSON.isEmpty()) {
+            if (commandJSON == null || commandJSON.isEmpty()) {
                 throw new SimulationException("command is required!!");
+            } else {
+                if(!commandJSON.matches(Constants.COMMAND_PATTERN_REGX)){
+                    throw new SimulationException("Unknown command, command should match regex : "+Constants.COMMAND_PATTERN_REGX);
+                }
             }
 
             if (Integer.parseInt((String) zombieLocationJSON.get("x")) >= Integer.parseInt((String) gridDimensionJSON.get("x")) ||

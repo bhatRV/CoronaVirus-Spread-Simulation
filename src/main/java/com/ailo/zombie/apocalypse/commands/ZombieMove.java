@@ -3,6 +3,7 @@ package com.ailo.zombie.apocalypse.commands;
 
 import com.ailo.zombie.apocalypse.dto.Location;
 import com.ailo.zombie.apocalypse.dto.enums.Direction;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,14 +119,5 @@ public class ZombieMove implements Command {
         }
 
         return path;
-    }
-
-    public int getStep() {
-        return step;
-    }
-
-    @Override
-    public String toString() {
-        return " FORWARD " + step;
     }
 }

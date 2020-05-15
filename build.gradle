@@ -41,9 +41,30 @@ jacocoTestReport {
         csv.enabled false
         html.destination file("${buildDir}/jacoco/coverage")
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'com/ailo/zombie/apocalypse/dto/**')
+        }))
+    }
 }
 
-
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 1.0
+            }
+            excludes = [
+                    'io.reflectoring.coverage.part.PartlyCovered',
+                    'io.reflectoring.coverage.ignored.*',
+                    'io.reflectoring.coverage.part.NotCovered'
+            ]
+        }
+    }
+}
 run {
     mainClassName = 'com.ailo.zombie.apocalypse.ZombieApocalypse'
     standardInput = System.in

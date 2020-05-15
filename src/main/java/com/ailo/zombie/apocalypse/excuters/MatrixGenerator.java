@@ -38,7 +38,7 @@ public class MatrixGenerator implements Function<DataInput, ZombieGrid[][]> {
         return sqr;
     }
 
-    public static void printGrid(ZombieGrid[][] matrix) {
+    private static void printGrid(ZombieGrid[][] matrix) {
         logger.debug("Initial layout of Zombie and creature position ");
         for (int x = 0; x < matrix.length; x++) {
             for (int y = 0; y < matrix[x].length; y++) {
