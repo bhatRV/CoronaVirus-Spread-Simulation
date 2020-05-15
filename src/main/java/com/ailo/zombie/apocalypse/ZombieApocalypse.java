@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class ZombieApocalypse {
@@ -29,7 +28,7 @@ public class ZombieApocalypse {
         logger.debug("ZOMBIE INFECTION PATH");
         Runnable zombie = new StartInfection(matrixZombieGrid, dataInput);
         Thread zombieThread = new Thread(zombie);
-        zombieThread.setDaemon(true);
+        //zombieThread.setDaemon(true);
         zombieThread.start();
         zombieThread.join();
         logger.info("CONSOLIDATED POINTS TALLY");
@@ -123,9 +122,9 @@ public class ZombieApocalypse {
                     .command(commandJSON)
                     .build();
 
-        } catch (IOException | ParseException e) {
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
-            throw new SimulationException("ParseException | IOException caught!!");
+            throw new SimulationException("ParseException | IOException caught!!, Provide valid file");
         }
 
         return inputFile;

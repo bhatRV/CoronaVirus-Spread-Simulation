@@ -219,4 +219,15 @@ class ZombieApocalypseTest {
         }
     }
 
+  @Test
+    public void testZombieApocalypse_validation_FileNotFound() {
+         try {
+            ZombieApocalypse.main(new String[]{"xy.json"});
+            fail("Should throw SimulationException");
+        } catch (SimulationException se) {
+            assertTrue(se.getMessage().startsWith("ParseException | IOException caught!!"));
+        } catch (InterruptedException e) {
+            fail("Should throw SimulationException");
+        }
+    }
 }

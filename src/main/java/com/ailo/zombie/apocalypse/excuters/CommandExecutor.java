@@ -71,7 +71,7 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
     private void process(List<Location> locations, Zombie zombie) {
         locations.forEach(p -> {
             try {
-                ZombieGrid zombieGrid = siteMap[(int) p.getCoordinateX()][(int) p.getCoordinateY()];
+                ZombieGrid zombieGrid = siteMap[ p.getCoordinateX()][ p.getCoordinateY()];
 
                 if (zombieGrid.getType() == Type.CREATURE) {
                     zombieGrid.setInfected(true);
@@ -86,14 +86,14 @@ public class CommandExecutor implements BiFunction<Zombie, Command, Zombie> {
                     Runnable zombieRunnable = new StartInfection(newZombiePath, newDataInput);
 
                     Thread zombieThread = new Thread(zombieRunnable);
-                    zombieThread.setDaemon(true);
+                    //zombieThread.setDaemon(true);
                     zombieThread.start();
                     zombieThread.join();
 
                     int totalPoints = FinalStatus.getZombiesCount();
                     FinalStatus.setZombiesCount(++totalPoints);
                 }
-            } catch (ArrayIndexOutOfBoundsException | InterruptedException e) {
+           } catch (ArrayIndexOutOfBoundsException | InterruptedException e) {
 
                 throw new SimulationException("\nSession ended because there is an attempt to navigate "
                         + "beyond the boundaries of the ZombieGrid; ");
