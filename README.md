@@ -1,8 +1,9 @@
  
-# Project Title: COVID Apocalypse
+# Project Title: COVID Spread Simulation
 
 This is a simulation of a strange incident due to a deadly infection. COVID spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread. 
-Note: name zombie ==> covid in all the class names
+
+### Note: name zombie ==> covid in all the class names
 
 ### Author : RASHMI VISHNU
  
