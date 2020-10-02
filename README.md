@@ -1,7 +1,8 @@
  
-# Project Title: Zombie Apocalypse
+# Project Title: COVID Apocalypse
 
-This is a simulation of a strange incident due to a deadly infection. Zombies spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread.
+This is a simulation of a strange incident due to a deadly infection. COVID spread infection and keep moving with in a given dimention. This application simulates and counts the infection spread. 
+Note: name zombie ==> covid in all the class names
 
 ### Author : RASHMI VISHNU
  
@@ -113,8 +114,8 @@ Format:
  
   ```diff
 =======================POINTS TALLY=================
-20:35:46.581 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies score : [ 3 ]
-20:35:46.582 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - Zombies positions [ (1,2)(0,1)(3,1)(2,1) ]
+20:35:46.581 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - COVID score : [ 3 ]
+20:35:46.582 [main] INFO  c.a.z.apocalypse.ZombieApocalypse - COVID positions [ (1,2)(0,1)(3,1)(2,1) ]
 
  ```
 
